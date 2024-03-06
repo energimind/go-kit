@@ -1,4 +1,4 @@
-module github.com/energimind/module/go-kit
+module github.com/energimind/go-kit
 
 go 1.22
 
