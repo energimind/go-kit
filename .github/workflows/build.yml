@@ -33,3 +33,7 @@ jobs:
         uses: golangci/golangci-lint-action@v3
         with:
           version: latest
+      - name: Run markdownlint1
+        uses: avto-dev/markdown-lint@v1
+        with:
+          args: "README.md"
