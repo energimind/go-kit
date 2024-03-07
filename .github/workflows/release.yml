@@ -18,6 +18,34 @@ jobs:
         run: go test -count=1 ./...
       - name: Build
         run: go build -v ./...
+      - name: Generate changelog
+        id: changelog
+        uses: mikepenz/release-changelog-builder-action@v4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          configurationJson: |
+            {
+              "template": "#{{CHANGELOG}}\n\n<details>\n<summary>Uncategorized</summary>\n\n#{{UNCATEGORIZED}}\n</details>",
+              "categories": [
+                  {
+                    "title": "## 🚀 Features",
+                    "labels": [ "feature" ]
+                  },
+                  {
+                    "title": "## 🐛 Fixes",
+                    "labels": [ "fix" ]
+                  },
+                  {
+                    "title": "## 💬 Other",
+                    "labels": [ "other" ]
+                  },
+                  {
+                    "title": "## 📦 Dependencies",
+                    "labels": [ "dependencies" ]
+                  }
+                ]
+             }
       - name: Create release
         id: release
         uses: actions/create-release@v1
@@ -26,5 +54,6 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
+          body: ${{ steps.changelog.outputs.changelog }}
           draft: false
           prerelease: false
