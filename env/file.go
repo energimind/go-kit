@@ -1,6 +1,8 @@
 package env
 
 import (
+	"errors"
+	"io/fs"
 	"os"
 	"path"
 	"strings"
@@ -29,7 +31,7 @@ func resolveFilePath(file string, getwd func() (string, error)) (string, error) 
 func readOptionalFile(file string) (string, error) {
 	content, err := os.ReadFile(path.Clean(file))
 	if err != nil {
-		if os.IsNotExist(err) {
+		if errors.Is(err, fs.ErrNotExist) {
 			return "", nil
 		}
 
