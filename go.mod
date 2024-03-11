@@ -4,7 +4,7 @@ go 1.22
 
 require (
 	github.com/caarlos0/env/v7 v7.1.0
-	github.com/google/uuid v1.3.0
+	github.com/google/uuid v1.6.0
 	github.com/stretchr/testify v1.9.0
 	github.com/teris-io/shortid v0.0.0-20220617161101-71ec9f2aa569
 )
