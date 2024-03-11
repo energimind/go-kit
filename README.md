@@ -1,8 +1,16 @@
 # Go-Kit: Energimind's General Purpose Go Project
 
-This repository contains a general purpose Go project used in Energimind's product. It includes utilities for working
-with host addresses, including functions for composing host addresses from specified addresses, ports, and default
-ports.
+This repository contains a general purpose Go project used in Energimind's product.
+
+It includes utilities for working with host addresses, including functions for composing host addresses from specified
+addresses, ports, and default ports.
+
+It also includes utilities for working with environment variables, including functions for reading environment
+variables.
+
+It includes utilities for working with HTTP servers, including functions for starting and stopping HTTP servers.
+
+In includes a collection of commonly used ID generators.
 
 While these utilities are commonly used in Go microservices, they can be used in other types of projects as well.
 
