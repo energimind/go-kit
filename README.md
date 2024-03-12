@@ -1,6 +1,7 @@
 # Go-Kit: Energimind's General Purpose Go Project
 
 [![Build Status](https://github.com/energimind/go-kit/actions/workflows/build.yml/badge.svg)](https://github.com/energimind/go-kit/actions)
+[![Go Report Card](https://goreportcard.com/badge/github.com/energimind/go-kit)](https://goreportcard.com/report/github.com/energimind/go-kit)
 
 This repository contains a general purpose Go project used in Energimind's product.
 
