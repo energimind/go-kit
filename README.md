@@ -2,6 +2,7 @@
 
 [![Build Status](https://github.com/energimind/go-kit/actions/workflows/build.yml/badge.svg)](https://github.com/energimind/go-kit/actions)
 [![Go Report Card](https://goreportcard.com/badge/github.com/energimind/go-kit)](https://goreportcard.com/report/github.com/energimind/go-kit)
+[![GitHub license](https://img.shields.io/github/license/energimind/go-kit)](https://github.com/energimind/go-kit/blob/master/LICENSE)
 
 This repository contains a general purpose Go project used in Energimind's product.
 
