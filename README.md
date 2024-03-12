@@ -1,5 +1,7 @@
 # Go-Kit: Energimind's General Purpose Go Project
 
+[![Build Status](https://github.com/energimind/go-kit/actions/workflows/build.yml/badge.svg)](https://github.com/energimind/go-kit/actions)
+
 This repository contains a general purpose Go project used in Energimind's product.
 
 It includes utilities for working with host addresses, including functions for composing host addresses from specified
