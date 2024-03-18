@@ -1,0 +1,126 @@
+package crud
+
+import (
+	"context"
+	"testing"
+
+	"github.com/stretchr/testify/require"
+)
+
+// Setup is the setup for the CRUD tests.
+type Setup[T, K any] struct {
+	// These operations operate on the repository.
+	GetAll  func(ctx context.Context) ([]T, error)
+	GetByID func(ctx context.Context, id K) (T, error)
+	Create  func(ctx context.Context, model T) error
+	Update  func(ctx context.Context, model T) error
+	Delete  func(ctx context.Context, id K) error
+
+	// These operations do not operate on the repository, but on the entity itself.
+	NewEntity     func(key int) T // create a new entity with the given key
+	ModifyEntity  func(model T) T // modify the given entity
+	UnboundEntity func() T        // entity with no key
+	ExtractKey    func(T) K       // key extractor
+	MissingKey    func() K        // key that does not exist
+
+	NotFoundErr func() any // not found error
+}
+
+// RunTests runs the CRUD tests for the given type.
+func RunTests[T, K any](t *testing.T, setup Setup[T, K]) { //nolint:funlen
+	t.Helper()
+
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+
+	keyCounter := 0
+
+	nextKey := func() int {
+		keyCounter++
+
+		return keyCounter
+	}
+
+	t.Run("missing-notFound", func(t *testing.T) {
+		t.Run("getByID", func(t *testing.T) {
+			_, err := setup.GetByID(ctx, setup.MissingKey())
+
+			notFoundErr := setup.NotFoundErr()
+
+			require.ErrorAs(t, err, &notFoundErr)
+		})
+
+		t.Run("update", func(t *testing.T) {
+			notFoundErr := setup.NotFoundErr()
+
+			require.ErrorAs(t, setup.Update(ctx, setup.UnboundEntity()), &notFoundErr)
+		})
+
+		t.Run("delete", func(t *testing.T) {
+			notFoundErr := setup.NotFoundErr()
+
+			require.ErrorAs(t, setup.Delete(ctx, setup.MissingKey()), &notFoundErr)
+		})
+	})
+
+	t.Run("getAll-empty", func(t *testing.T) {
+		all1, err := setup.GetAll(ctx)
+
+		require.NoError(t, err)
+		require.Empty(t, all1)
+	})
+
+	ent := setup.NewEntity(nextKey())
+	key := setup.ExtractKey(ent)
+
+	t.Run("create", func(t *testing.T) {
+		require.NoError(t, setup.Create(ctx, ent))
+	})
+
+	t.Run("getAll-foundOne", func(t *testing.T) {
+		all1, err := setup.GetAll(ctx)
+
+		require.NoError(t, err)
+		require.Equal(t, []T{ent}, all1)
+	})
+
+	t.Run("getByID-found", func(t *testing.T) {
+		e2, err := setup.GetByID(ctx, key)
+
+		require.NoError(t, err)
+		require.Equal(t, ent, e2)
+	})
+
+	entMod := setup.ModifyEntity(ent)
+
+	require.Equal(t, key, setup.ExtractKey(entMod), "key should not change")
+	require.NotEqual(t, ent, entMod, "entity should change")
+
+	t.Run("update", func(t *testing.T) {
+		require.NoError(t, setup.Update(ctx, entMod))
+	})
+
+	t.Run("getByID-updated", func(t *testing.T) {
+		fetched, err := setup.GetByID(ctx, key)
+
+		require.NoError(t, err)
+		require.Equal(t, entMod, fetched)
+	})
+
+	t.Run("delete", func(t *testing.T) {
+		require.NoError(t, setup.Delete(ctx, key))
+	})
+
+	t.Run("delete-again-notFound", func(t *testing.T) {
+		notFoundErr := setup.NotFoundErr()
+
+		require.ErrorAs(t, setup.Delete(ctx, key), &notFoundErr)
+	})
+
+	t.Run("getAll-empty", func(t *testing.T) {
+		all2, err := setup.GetAll(ctx)
+
+		require.NoError(t, err)
+		require.Empty(t, all2)
+	})
+}
