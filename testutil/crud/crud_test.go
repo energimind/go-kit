@@ -12,42 +12,46 @@ func TestRunTests(t *testing.T) {
 	repo := newTestRepo()
 
 	RunTests(t, Setup[testEntity, int]{
-		GetAll: func(ctx context.Context) ([]testEntity, error) {
-			return repo.getAll()
+		RepoOps: RepoOps[testEntity, int]{
+			GetAll: func(ctx context.Context) ([]testEntity, error) {
+				return repo.getAll()
+			},
+			GetByID: func(ctx context.Context, id int) (testEntity, error) {
+				return repo.getByID(id)
+			},
+			Create: func(ctx context.Context, entity testEntity) error {
+				return repo.create(entity)
+			},
+			Update: func(ctx context.Context, entity testEntity) error {
+				return repo.update(entity)
+			},
+			Delete: func(ctx context.Context, id int) error {
+				return repo.delete(id)
+			},
 		},
-		GetByID: func(ctx context.Context, id int) (testEntity, error) {
-			return repo.getByID(id)
-		},
-		Create: func(ctx context.Context, entity testEntity) error {
-			return repo.create(entity)
-		},
-		Update: func(ctx context.Context, entity testEntity) error {
-			return repo.update(entity)
-		},
-		Delete: func(ctx context.Context, id int) error {
-			return repo.delete(id)
-		},
-		NewEntity: func(key int) testEntity {
-			return testEntity{
-				id:    key,
-				value: "test-" + strconv.Itoa(key),
-			}
-		},
-		ModifyEntity: func(entity testEntity) testEntity {
-			entity.value = "test-modified"
+		EntityOps: EntityOps[testEntity, int]{
+			NewEntity: func(key int) testEntity {
+				return testEntity{
+					id:    key,
+					value: "test-" + strconv.Itoa(key),
+				}
+			},
+			ModifyEntity: func(entity testEntity) testEntity {
+				entity.value = "test-modified"
 
-			return entity
-		},
-		UnboundEntity: func() testEntity {
-			return testEntity{
-				value: "test-unbound",
-			}
-		},
-		ExtractKey: func(entity testEntity) int {
-			return entity.id
-		},
-		MissingKey: func() int {
-			return -1
+				return entity
+			},
+			UnboundEntity: func() testEntity {
+				return testEntity{
+					value: "test-unbound",
+				}
+			},
+			ExtractKey: func(entity testEntity) int {
+				return entity.id
+			},
+			MissingKey: func() int {
+				return -1
+			},
 		},
 		NotFoundErr: func() any {
 			return testError{}
