@@ -22,7 +22,7 @@ func CheckAllFieldsAreMapped(t testingT, from any, to any) {
 	fromType := reflect.TypeOf(from)
 	toType := reflect.TypeOf(to)
 
-	for i := 0; i < fromType.NumField(); i++ {
+	for i := range fromType.NumField() {
 		field := fromType.Field(i)
 		_, ok := toType.FieldByName(field.Name)
 
