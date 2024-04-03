@@ -1,0 +1,10 @@
+project_name: go-kit
+
+release:
+    github:
+        owner: energimind
+        name: go-kit
+    draft: false
+
+builds:
+    - skip: true
