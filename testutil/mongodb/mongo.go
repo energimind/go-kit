@@ -22,6 +22,7 @@ import (
 type MongoEnvironment struct {
 	idCounter atomic.Int64
 	client    *mongo.Client
+	URI       string // server address including scheme and port
 }
 
 // NewMongoEnvironment creates a new MongoDB test environment.
@@ -45,7 +46,10 @@ func (m *MongoEnvironment) Start() (context.CancelFunc, error) {
 			ContainerRequest: testcontainers.ContainerRequest{
 				Image:        "mongo:latest",
 				ExposedPorts: []string{mappedPort},
-				WaitingFor:   wait.ForLog("Waiting for connections").WithStartupTimeout(startupTimeout),
+				Env: map[string]string{
+					"MONGO_INITDB_DATABASE": "test",
+				},
+				WaitingFor: wait.ForLog("Waiting for connections").WithStartupTimeout(startupTimeout),
 			},
 			Started: true,
 		},
@@ -57,8 +61,9 @@ func (m *MongoEnvironment) Start() (context.CancelFunc, error) {
 	mongoHost, _ := mc.Host(ctx)
 	mongoPort, _ := mc.MappedPort(ctx, mappedPort)
 
-	//nolint:perfsprint // there is no need to optimize this code, it is only used in tests
-	opts := options.Client().ApplyURI(fmt.Sprintf("mongodb://%s", net.JoinHostPort(mongoHost, mongoPort.Port())))
+	uri := "mongodb://" + net.JoinHostPort(mongoHost, mongoPort.Port())
+
+	opts := options.Client().ApplyURI(uri)
 
 	client, err := mongo.Connect(ctx, opts)
 	if err != nil {
@@ -66,6 +71,7 @@ func (m *MongoEnvironment) Start() (context.CancelFunc, error) {
 	}
 
 	m.client = client
+	m.URI = uri
 
 	return func() {
 		defer cancel()
