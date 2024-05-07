@@ -17,6 +17,9 @@ It includes utilities for working with HTTP servers, including functions for sta
 
 In includes a collection of commonly used ID generators.
 
+This project also includes a Gin-based REST router and generic route handlers. These handlers are designed to be
+flexible and reusable, reducing the amount of boilerplate code needed when defining new routes.
+
 While these utilities are commonly used in Go microservices, they can be used in other types of projects as well.
 
 ## Contributing
