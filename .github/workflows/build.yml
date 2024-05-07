@@ -19,7 +19,12 @@ jobs:
         with:
           go-version: stable
       - name: Run tests
-        run: go test -count=1 -race ./...
+        run: go test -count=1 -race ./... -coverprofile ./coverage.txt
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v4.0.1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: energimind/go-kit
   lint:
     runs-on: ubuntu-latest
     steps:
@@ -30,7 +35,7 @@ jobs:
         with:
           go-version: stable
       - name: Run linter
-        uses: golangci/golangci-lint-action@v5
+        uses: golangci/golangci-lint-action@v6
         with:
           version: latest
       - name: Run markdownlint

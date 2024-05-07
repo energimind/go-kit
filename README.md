@@ -1,6 +1,7 @@
 # Go-Kit: Energimind's General Purpose Go Project
 
 [![Build Status](https://github.com/energimind/go-kit/actions/workflows/build.yml/badge.svg)](https://github.com/energimind/go-kit/actions)
+[![codecov](https://codecov.io/gh/energimind/go-kit/graph/badge.svg?token=NR7PKHC590)](https://codecov.io/gh/energimind/go-kit)
 [![GitHub release](https://img.shields.io/github/v/release/energimind/go-kit)](https://github.com/energimind/go-kit/releases/latest)
 [![Go Report Card](https://goreportcard.com/badge/github.com/energimind/go-kit)](https://goreportcard.com/report/github.com/energimind/go-kit)
 [![GitHub license](https://img.shields.io/github/license/energimind/go-kit)](https://github.com/energimind/go-kit/blob/master/LICENSE)
