@@ -16,7 +16,7 @@ var Global = zerolog.New(zerolog.NewConsoleWriter(func(w *zerolog.ConsoleWriter)
 	}
 })).With().Timestamp().Logger()
 
-func init() { //nolint:init
+func init() { //nolint:gochecknoinits
 	zerolog.TimestampFunc = func() time.Time {
 		return time.Now().UTC()
 	}
