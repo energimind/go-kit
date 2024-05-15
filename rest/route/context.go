@@ -57,6 +57,11 @@ func (c *Context) SetHeader(key, value string) {
 	c.gc.Header(key, value)
 }
 
+// Param returns the value of the parameter identified by key.
+func (c *Context) Param(key string) string {
+	return c.gc.Param(key)
+}
+
 // Query returns the value of the query identified by key.
 func (c *Context) Query(key string) string {
 	return c.gc.Query(key)

@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"testing"
 
+	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/require"
 )
 
@@ -52,6 +53,18 @@ func TestContext_SetHeader(t *testing.T) {
 	c.SetHeader("header1", "value1")
 
 	require.Equal(t, "value1", rec.Header().Get("header1"))
+}
+
+func TestContext_Param(t *testing.T) {
+	t.Parallel()
+
+	ctx, _ := testRequest("")
+
+	ctx.Params = append(ctx.Params, gin.Param{Key: "param1", Value: "value1"})
+
+	c := newContext(ctx)
+
+	require.Equal(t, "value1", c.Param("param1"))
 }
 
 func TestContext_Query(t *testing.T) {
