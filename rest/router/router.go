@@ -12,6 +12,9 @@ type route interface {
 	RegisterRoutes(root gin.IRouter)
 }
 
+// routeFunc is a function that registers routes to a router.
+type routeFunc func(root gin.IRouter)
+
 // Router is the router for the REST API.
 type Router struct {
 	rtr *gin.Engine
@@ -36,6 +39,11 @@ func (r *Router) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 // RegisterRoutes registers the routes to the router.
 func (r *Router) RegisterRoutes(routes route) {
 	routes.RegisterRoutes(r.rtr)
+}
+
+// RegisterRoutesFunc registers the routes to the router using a function.
+func (r *Router) RegisterRoutesFunc(fn routeFunc) {
+	fn(r.rtr)
 }
 
 // GetRoutes returns the routes of the router.
