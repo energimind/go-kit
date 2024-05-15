@@ -76,6 +76,20 @@ func TestContext_Query(t *testing.T) {
 	require.Equal(t, "value1", c.Query("query1"))
 }
 
+func TestContext_Get(t *testing.T) {
+	t.Parallel()
+
+	ctx, _ := testRequest("")
+	c := newContext(ctx)
+
+	c.gc.Set("key", "value")
+
+	v, ok := c.Get("key")
+
+	require.True(t, ok)
+	require.Equal(t, "value", v)
+}
+
 func TestContext_Deadline_Done(t *testing.T) {
 	t.Parallel()
 

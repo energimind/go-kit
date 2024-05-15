@@ -67,6 +67,11 @@ func (c *Context) Query(key string) string {
 	return c.gc.Query(key)
 }
 
+// Get returns the value for the given key.
+func (c *Context) Get(key string) (any, bool) {
+	return c.gc.Get(key)
+}
+
 // Deadline implements the context.Context interface.
 func (c *Context) Deadline() (time.Time, bool) {
 	return c.gc.Deadline()
