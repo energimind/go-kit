@@ -22,8 +22,8 @@ func ComposeAddress(address, port, defaultPort string) string {
 func ComposeAddresses(addresses []string, port, defaultPort string) []string {
 	composed := make([]string, len(addresses))
 
-	for i := range len(addresses) {
-		composed[i] = ComposeAddress(addresses[i], port, defaultPort)
+	for i, addr := range addresses {
+		composed[i] = ComposeAddress(addr, port, defaultPort)
 	}
 
 	return composed
